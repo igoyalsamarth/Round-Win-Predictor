@@ -2,12 +2,14 @@ import numpy as np
 import pandas as pd
 from xgboost import XGBClassifier
 from sklearn.metrics import accuracy_score
+import matplotlib.pyplot as plt
+from xgboost import plot_tree
 
-df = pd.read_csv('data_train.csv')
+df = pd.read_csv('../input/WinPredcitor/data_train.csv')
 X_train = np.array(df[['round','atkTeam','half','t1_load','t2_load']])
 y_train = np.array(df[['wTeam']])
 
-df = pd.read_csv('data_test.csv')
+df = pd.read_csv('../input/WinPredcitor/data_test.csv')
 X_test = np.array(df[['round','atkTeam','half','t1_load','t2_load']])
 y_test = np.array(df[['wTeam']])
 
@@ -20,5 +22,10 @@ print(y_pred)
 predictions = [round(value) for value in y_pred]
 accuracy = accuracy_score(y_test,predictions)
 print(accuracy)
+
+fig,ax  = plt.subplots(figsize = (18,18))
+plot_tree(model,num_trees = 4,ax = ax)
+plt.savefig('xgbtree.png', dpi = 600, bbox_inches = 'tight')
+plt.show()
 
 #accuracy = 65%
